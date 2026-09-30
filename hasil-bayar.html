@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Pembayaran - Restoran 11 RPL</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Arial, Helvetica, sans-serif;
+        }
+
+        :root {
+            --coklat-tua: #3E2723;
+            --coklat: #5D4037;
+            --coklat-muda: #795548;
+            --cream: #F5EDE3;
+            --cream-terang: #FFF9F3;
+            --emas: #C49A6C;
+            --putih: #FFFFFF;
+            --abu: #777;
+            --hijau: #2E7D32;
+        }
+
+        body {
+            background-color: var(--cream);
+            color: var(--coklat-tua);
+            padding-bottom: 40px;
+        }
+
+        nav {
+            height: 75px;
+            background-color: var(--coklat-tua);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8%;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo { color: var(--putih); font-size: 24px; font-weight: bold; }
+        .logo span { color: var(--emas); }
+
+        .container {
+            width: 90%;
+            max-width: 650px;
+            margin: 40px auto;
+        }
+
+        .receipt {
+            background-color: var(--putih);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(62, 39, 35, 0.08);
+        }
+
+        .status-box {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px dashed #e5dcd2;
+            margin-bottom: 20px;
+        }
+
+        .status-icon {
+            width: 70px;
+            height: 70px;
+            background-color: var(--hijau);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            margin: 0 auto 14px auto;
+        }
+
+        .status-box h1 {
+            font-size: 22px;
+            color: var(--hijau);
+            margin-bottom: 6px;
+        }
+
+        .status-box p { color: var(--abu); font-size: 14px; }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: var(--coklat);
+        }
+
+        .info-row span:last-child { font-weight: bold; color: var(--coklat-tua); }
+
+        .divider {
+            border-top: 1px dashed #e5dcd2;
+            margin: 18px 0;
+        }
+
+        .receipt-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .receipt-item .nama { font-weight: bold; color: var(--coklat-tua); }
+        .receipt-item .ket { color: var(--abu); font-size: 12px; margin-top: 2px; }
+        .receipt-item .harga { white-space: nowrap; font-weight: bold; color: var(--coklat-muda); }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: var(--coklat);
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 19px;
+            font-weight: bold;
+            border-top: 1px solid #e5dcd2;
+            padding-top: 14px;
+            margin-top: 10px;
+            color: var(--coklat-tua);
+        }
+
+        .catatan-box {
+            background-color: var(--cream-terang);
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            color: var(--coklat);
+            margin-top: 16px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 26px;
+        }
+
+        .btn {
+            flex: 1;
+            border: none;
+            padding: 13px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--emas);
+            color: var(--coklat-tua);
+        }
+        .btn-primary:hover { background-color: #d5ae83; }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--coklat-muda);
+            color: var(--coklat-muda);
+        }
+        .btn-outline:hover { background-color: var(--cream-terang); }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--abu);
+        }
+
+        .empty-state a { color: var(--emas); font-weight: bold; }
+
+        @media print {
+            nav, .btn-group { display: none; }
+            body { background: #fff; }
+            .container { margin: 0; width: 100%; max-width: 100%; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">RESTORAN <span>11 RPL</span></div>
+    </nav>
+
+    <main class="container">
+        <div class="receipt" id="receiptBox">
+            <!-- Diisi otomatis oleh JavaScript -->
+        </div>
+    </main>
+
+    <script>
+        const LAST_ORDER_KEY = 'r11rpl_last_order';
+
+        function formatRupiah(angka) {
+            return 'Rp' + angka.toLocaleString('id-ID');
+        }
+
+        function formatTanggal(iso) {
+            const d = new Date(iso);
+            return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) +
+                   ', ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        window.onload = function() {
+            const box = document.getElementById('receiptBox');
+            const raw = localStorage.getItem(LAST_ORDER_KEY);
+
+            if (!raw) {
+                box.innerHTML = `
+                    <div class="empty-state">
+                        Belum ada pesanan yang dibayar.<br><br>
+                        <a href="menu-1.php">← Kembali ke Menu</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const order = JSON.parse(raw);
+
+            let itemsHtml = order.items.map(item => {
+                const ket = [];
+                if (item.levelName) ket.push(item.levelName);
+                if (item.notes) ket.push('Catatan: ' + item.notes);
+                return `
+                    <div class="receipt-item">
+                        <div>
+                            <div class="nama">${item.qty}x ${item.name}</div>
+                            ${ket.length ? `<div class="ket">${ket.join(' • ')}</div>` : ''}
+                        </div>
+                        <div class="harga">${formatRupiah(item.unitPrice * item.qty)}</div>
+                    </div>
+                `;
+            }).join('');
+
+            box.innerHTML = `
+                <div class="status-box">
+                    <div class="status-icon">✓</div>
+                    <h1>Pembayaran Berhasil</h1>
+                    <p>Pesananmu sedang diproses oleh dapur kami</p>
+                </div>
+
+                <div class="info-row"><span>No. Pesanan</span><span>${order.orderId}</span></div>
+                <div class="info-row"><span>Tanggal</span><span>${formatTanggal(order.tanggal)}</span></div>
+                <div class="info-row"><span>Nomor Meja</span><span>Meja ${order.meja}</span></div>
+                <div class="info-row"><span>Metode Pembayaran</span><span>${order.metodeLabel || order.metode || '-'}</span></div>
+
+                <div class="divider"></div>
+
+                ${itemsHtml}
+
+                <div class="divider"></div>
+
+                <div class="summary-row"><span>Subtotal</span><span>${formatRupiah(order.subtotal)}</span></div>
+                <div class="summary-row"><span>Biaya layanan</span><span>${formatRupiah(order.layanan)}</span></div>
+                <div class="summary-total"><span>Total Bayar</span><span>${formatRupiah(order.total)}</span></div>
+
+                ${order.catatan ? `<div class="catatan-box">📝 <strong>Catatan:</strong> ${order.catatan}</div>` : ''}
+
+                <div class="btn-group">
+                    <button class="btn btn-outline" onclick="window.print()">🖨 Cetak Struk</button>
+                    <a href="fahri.html" class="btn btn-primary">📦 Lacak Pesanan</a>
+                </div>
+
+                <a href="menu-1.php" class="btn btn-outline" style="display:block; margin-top:12px;">← Pesan Lagi</a>
+            `;
+        };
+    </script>
+
+</body>
+</html>

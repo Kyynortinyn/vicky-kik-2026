@@ -1,0 +1,1302 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pesanan Sedang Dimasak</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,body{
+    width:100%;
+    min-height:100%;
+}
+
+body{
+    background:#f2f2f2;
+    font-family:Arial,Helvetica,sans-serif;
+    color:#222;
+}
+
+/* =========================
+   FULL SCREEN APP
+========================= */
+
+.app{
+    width:100%;
+    min-height:100vh;
+    background:#fff;
+    overflow:hidden;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+    height:72px;
+    width:100%;
+    display:flex;
+    align-items:center;
+    padding:12px 35px;
+    background:#fff;
+    border-bottom:1px solid #eee;
+}
+
+.back{
+    width:45px;
+    height:45px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:42px;
+    cursor:pointer;
+    user-select:none;
+    color:#222;
+}
+
+.search{
+    width:430px;
+    height:45px;
+    margin-left:15px;
+    display:flex;
+    align-items:center;
+    padding:0 18px;
+    border-radius:25px;
+    background:#f3f3f3;
+    color:#777;
+    font-size:14px;
+}
+
+.search-icon{
+    font-size:21px;
+    margin-right:8px;
+}
+
+.search b{
+    margin-left:auto;
+    color:#222;
+    cursor:pointer;
+}
+
+/* =========================
+   HERO FULL WIDTH
+========================= */
+
+.hero{
+    width:100%;
+    height:430px;
+    position:relative;
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at center 25%,
+            #fff7f1 0%,
+            #ffe4d3 45%,
+            #ffc39f 100%
+        );
+}
+
+.hero::before{
+    content:"";
+    position:absolute;
+    width:500px;
+    height:500px;
+    border-radius:50%;
+    background:#ffffff55;
+    left:-150px;
+    top:-250px;
+}
+
+.hero::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    height:130px;
+
+    background:linear-gradient(
+        to top,
+        #e89b67,
+        transparent
+    );
+
+    opacity:.5;
+}
+
+.cook{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    z-index:1;
+}
+
+.cook img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    object-position:center bottom;
+}
+
+/* gambar pengganti */
+.cook-fallback{
+    width:260px;
+    height:260px;
+
+    margin-bottom:25px;
+
+    border-radius:50%;
+    background:#fff;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:130px;
+
+    box-shadow:
+        0 15px 40px #00000018;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+    position:relative;
+    width:100%;
+    min-height:600px;
+
+    margin-top:-30px;
+
+    padding:
+        30px
+        7%
+        60px;
+
+    background:#fff;
+
+    border-radius:35px 35px 0 0;
+
+    z-index:2;
+}
+
+/* =========================
+   ETA
+========================= */
+
+.eta{
+    position:absolute;
+
+    top:-100px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:200px;
+    height:200px;
+
+    border:1px solid #eee;
+    border-radius:50%;
+
+    background:#fff;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    box-shadow:
+        0 10px 35px #00000012;
+
+    z-index:5;
+}
+
+.eta small{
+    color:#777;
+    font-size:14px;
+}
+
+.eta strong{
+    margin-top:5px;
+    font-size:35px;
+}
+
+.eta span{
+    margin-top:2px;
+    font-size:17px;
+}
+
+.late{
+    margin-top:10px;
+    color:#e56720;
+    font-size:13px;
+    font-weight:bold;
+}
+
+/* =========================
+   TITLE
+========================= */
+
+h1{
+    text-align:center;
+
+    font-size:32px;
+
+    margin:
+        90px
+        0
+        10px;
+}
+
+.sub{
+    text-align:center;
+    color:#777;
+
+    font-size:17px;
+
+    margin-bottom:35px;
+}
+
+/* =========================
+   ORDER CARD
+========================= */
+
+.card{
+    width:100%;
+    max-width:900px;
+
+    margin:0 auto;
+
+    padding:22px;
+
+    border:1px solid #eee;
+    border-radius:22px;
+
+    background:#fff;
+
+    box-shadow:
+        0 6px 25px #0000000c;
+}
+
+.cardhead{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding-bottom:18px;
+
+    border-bottom:1px solid #eee;
+}
+
+.restaurant{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.status{
+    margin-top:7px;
+
+    color:#e65f18;
+
+    font-size:14px;
+    font-weight:bold;
+}
+
+.icon{
+    width:55px;
+    height:55px;
+
+    border-radius:50%;
+
+    background:#fff1e7;
+
+    display:grid;
+    place-items:center;
+
+    font-size:28px;
+}
+
+/* =========================
+   BODY
+========================= */
+
+.body{
+    display:flex;
+    gap:20px;
+
+    padding-top:20px;
+}
+
+.thumb{
+    width:120px;
+    height:120px;
+
+    flex-shrink:0;
+
+    overflow:hidden;
+
+    border-radius:17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff0e5,
+            #ffd0b0
+        );
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.thumb-fallback{
+    font-size:55px;
+}
+
+.detail{
+    flex:1;
+    padding-top:3px;
+}
+
+.detail strong{
+    display:block;
+    font-size:19px;
+}
+
+.detail p{
+    max-width:700px;
+
+    margin:
+        8px
+        0
+        16px;
+
+    color:#777;
+
+    font-size:14px;
+    line-height:1.5;
+}
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress{
+    width:100%;
+    height:8px;
+
+    background:#eee;
+
+    border-radius:20px;
+
+    overflow:hidden;
+}
+
+.bar{
+    width:0%;
+    height:100%;
+
+    background:#08a83d;
+
+    border-radius:20px;
+
+    transition: width 0.6s ease;
+}
+
+.bar.done{
+    background:#08a83d;
+    box-shadow: 0 0 12px rgba(8,168,61,.6);
+}
+
+.processing{
+    display:block;
+
+    margin-top:8px;
+
+    color:#888;
+
+    font-size:12px;
+}
+
+/* =========================
+   STATUS STEPS
+========================= */
+
+.steps{
+    width:100%;
+    max-width:900px;
+
+    margin:35px auto 0;
+
+    display:grid;
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:20px;
+}
+
+.step{
+    position:relative;
+
+    padding:20px;
+
+    border:1px solid #eee;
+
+    border-radius:18px;
+
+    background:#fff;
+}
+
+.step-icon{
+    width:30px;
+    height:30px;
+
+    margin-bottom:12px;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#eee;
+
+    color:#777;
+
+    font-size:13px;
+    font-weight:bold;
+}
+
+.step.active .step-icon{
+    background:#08a83d;
+    color:#fff;
+}
+
+.step.completed{
+    border-color:#c9ecd3;
+    background:#f6fdf8;
+}
+
+.step.completed .step-icon{
+    background:#08a83d;
+    color:#fff;
+}
+
+.step.current{
+    border-color:#ffd9a8;
+    background:#fffaf3;
+}
+
+.step.current .step-icon{
+    background:#ff9d1f;
+    color:#fff;
+    animation: stepPulse 1.3s ease-in-out infinite;
+}
+
+@keyframes stepPulse{
+    0%{ box-shadow:0 0 0 0 rgba(255,157,31,.55); }
+    70%{ box-shadow:0 0 0 9px rgba(255,157,31,0); }
+    100%{ box-shadow:0 0 0 0 rgba(255,157,31,0); }
+}
+
+.eta.done{
+    border-color:#c9ecd3;
+}
+
+.late.done{
+    color:#08a83d;
+}
+
+/* =========================
+   TOAST / POP-UP NOTIFIKASI
+========================= */
+
+.toast{
+    position:fixed;
+    top:18px;
+    left:50%;
+    transform:translateX(-50%) translateY(-140%);
+
+    width:340px;
+    max-width:90%;
+
+    background:#fff;
+    border-left:5px solid #08a83d;
+    border-radius:14px;
+
+    box-shadow:0 12px 32px rgba(0,0,0,.18);
+
+    padding:16px 16px;
+
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+
+    z-index:999;
+
+    transition: transform .45s cubic-bezier(.34,1.56,.64,1);
+}
+
+.toast.show{
+    transform:translateX(-50%) translateY(0);
+}
+
+.toast-icon{
+    width:38px;
+    height:38px;
+    flex-shrink:0;
+
+    border-radius:50%;
+    background:#e7f9ed;
+    color:#08a83d;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:20px;
+}
+
+.toast-body{
+    flex:1;
+}
+
+.toast-title{
+    font-weight:bold;
+    font-size:14px;
+    margin-bottom:3px;
+    color:#222;
+}
+
+.toast-desc{
+    font-size:12px;
+    color:#777;
+    line-height:1.4;
+}
+
+.toast-close{
+    background:none;
+    border:none;
+    font-size:16px;
+    color:#aaa;
+    cursor:pointer;
+    line-height:1;
+    padding:2px;
+}
+
+.toast-close:hover{
+    color:#333;
+}
+
+@media(max-width:500px){
+    .toast{
+        width:auto;
+        left:12px;
+        right:12px;
+        transform:translateY(-140%);
+    }
+    .toast.show{
+        transform:translateY(0);
+    }
+}
+
+.step-text strong{
+    display:block;
+
+    font-size:14px;
+}
+
+.step-text span{
+    display:block;
+
+    margin-top:5px;
+
+    color:#888;
+
+    font-size:12px;
+    line-height:1.4;
+}
+
+/* =========================
+   BOTTOM
+========================= */
+
+.bottom{
+    width:100%;
+    max-width:900px;
+
+    margin:35px auto 0;
+
+    padding-top:20px;
+
+    border-top:1px solid #eee;
+
+    text-align:center;
+
+    color:#888;
+
+    font-size:14px;
+}
+
+.help-btn{
+    display:block;
+
+    width:220px;
+    height:48px;
+
+    margin:15px auto 0;
+
+    border:0;
+    border-radius:25px;
+
+    background:#222;
+    color:#fff;
+
+    font-size:14px;
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+.help-btn:hover{
+    opacity:.85;
+}
+
+/* =========================
+   LAPTOP / DESKTOP
+========================= */
+
+@media(min-width:1000px){
+
+    .hero{
+        height:470px;
+    }
+
+    .cook-fallback{
+        width:300px;
+        height:300px;
+        font-size:150px;
+    }
+
+    .content{
+        padding-left:10%;
+        padding-right:10%;
+    }
+
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media(max-width:800px){
+
+    .header{
+        padding:10px 20px;
+    }
+
+    .search{
+        width:auto;
+        flex:1;
+    }
+
+    .content{
+        padding-left:25px;
+        padding-right:25px;
+    }
+
+    .steps{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+}
+
+/* =========================
+   HP
+========================= */
+
+@media(max-width:500px){
+
+    .header{
+        padding:10px 15px;
+    }
+
+    .search{
+        font-size:12px;
+    }
+
+    .hero{
+        height:330px;
+    }
+
+    .content{
+        padding-left:15px;
+        padding-right:15px;
+    }
+
+    h1{
+        font-size:24px;
+    }
+
+    .sub{
+        font-size:15px;
+    }
+
+    .card{
+        padding:16px;
+    }
+
+    .thumb{
+        width:90px;
+        height:90px;
+    }
+
+    .restaurant{
+        font-size:16px;
+    }
+
+    .body{
+        gap:12px;
+    }
+
+    .steps{
+        grid-template-columns:1fr;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- TOAST / POP-UP NOTIFIKASI -->
+    <div class="toast" id="doneToast">
+        <div class="toast-icon">🎉</div>
+        <div class="toast-body">
+            <div class="toast-title">Pesanan Selesai!</div>
+            <div class="toast-desc" id="toastDesc">Pesananmu sudah siap, silakan ambil di kasir ya.</div>
+        </div>
+        <button class="toast-close" onclick="hideToast()">✕</button>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div
+            class="back"
+            onclick="history.back()"
+            title="Kembali"
+        >
+            ‹
+        </div>
+
+        <div class="search">
+
+            <span class="search-icon">⌕</span>
+
+            <span>
+                Temukan konten terkait
+            </span>
+
+            <b onclick="searchContent()">
+                Cari
+            </b>
+
+        </div>
+
+    </header>
+
+
+    <!-- HERO -->
+    <section class="hero">
+
+        <div class="cook">
+
+            <!--
+            Kalau punya gambar orang-memasak.jpg,
+            hapus div di bawah dan gunakan:
+
+            <img src="orang-memasak.jpg"
+                 alt="Orang sedang memasak">
+            -->
+
+            <div class="cook-fallback">
+                👨‍🍳
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CONTENT -->
+    <main class="content">
+
+        <!-- ETA -->
+        <div class="eta" id="etaBox">
+
+            <small>
+                selesai dalam
+            </small>
+
+            <strong id="etaTime">
+                18–28
+            </strong>
+
+            <span id="etaUnit">
+                min
+            </span>
+
+            <div class="late" id="etaSub">
+                Perkiraan
+            </div>
+
+        </div>
+
+
+        <!-- TITLE -->
+        <h1>
+            Pesananmu lagi disiapin
+        </h1>
+
+        <div class="sub">
+            Restoran sedang memasak pesananmu
+        </div>
+
+
+        <!-- ORDER -->
+        <div class="card">
+
+            <div class="cardhead">
+
+                <div>
+
+                    <div class="restaurant" id="orderRestaurant">
+                        Restoran 11 RPL
+                    </div>
+
+                    <div class="status" id="orderStatus">
+                        👨‍🍳 Pesanan sedang dimasak
+                    </div>
+
+                </div>
+
+                <div class="icon">
+                    🍳
+                </div>
+
+            </div>
+
+
+            <div class="body">
+
+                <div class="thumb">
+
+                    <div class="thumb-fallback">
+                        🍳
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <strong id="orderIdText">
+                        Dapur sedang memasak
+                    </strong>
+
+                    <p id="orderInfoText">
+                        Pesananmu sedang dipersiapkan
+                        oleh koki. Mohon tunggu
+                        sebentar ya.
+                    </p>
+
+                    <div class="progress">
+
+                        <div class="bar" id="progressBar"></div>
+
+                    </div>
+
+                    <small class="processing" id="processingText">
+                        Sedang diproses...
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STEPS -->
+        <div class="steps">
+
+            <div class="step" id="step1">
+
+                <div class="step-icon">
+                    1
+                </div>
+
+                <div class="step-text">
+
+                    <strong>
+                        Pesanan diterima
+                    </strong>
+
+                    <span>
+                        Restoran sudah menerima pesananmu
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="step" id="step2">
+
+                <div class="step-icon">
+                    2
+                </div>
+
+                <div class="step-text">
+
+                    <strong>
+                        Sedang dimasak
+                    </strong>
+
+                    <span>
+                        Koki sedang menyiapkan makananmu
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="step" id="step3">
+
+                <div class="step-icon">
+                    3
+                </div>
+
+                <div class="step-text">
+
+                    <strong>
+                        pesanan akan siap di ambil
+                    </strong>
+
+                    <span>
+                        Menunggu koki selsai memasak
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="step" id="step4">
+
+                <div class="step-icon">
+                    4
+                </div>
+
+                <div class="step-text">
+
+                    <strong>
+                        pesanan selesai
+                    </strong>
+
+                    <span>
+                        pesanan siap di ambil di kasir
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- BOTTOM -->
+        <div class="bottom">
+
+            <div id="bottomStatusText">
+                Pesanan sedang diproses...
+            </div>
+
+            <button
+                class="help-btn"
+                onclick="showHelp()"
+            >
+                Butuh bantuan?
+            </button>
+
+            <a
+                href="menu-1.php"
+                class="help-btn"
+                style="background:#e65f18; text-decoration:none; display:flex; align-items:center; justify-content:center;"
+            >
+                ← Kembali ke Menu
+            </a>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+/* ======================================================
+   KONFIGURASI PROSES PESANAN
+   Ubah angka ini kalau mau proses lebih cepat/lambat.
+====================================================== */
+const TOTAL_DURATION_MS = 3 * 60 * 1000; // total waktu simulasi proses (3 menit)
+
+// Persentase (0-100) titik dimulainya tiap tahap
+const STAGE_START = {
+    diterima: 0,
+    dimasak: 5,
+    siap: 65,
+    selesai: 100
+};
+
+const stepEls = [
+    document.getElementById('step1'),
+    document.getElementById('step2'),
+    document.getElementById('step3'),
+    document.getElementById('step4')
+];
+
+const progressBar = document.getElementById('progressBar');
+const processingText = document.getElementById('processingText');
+const orderStatusEl = document.getElementById('orderStatus');
+const orderInfoEl = document.getElementById('orderInfoText');
+const bottomStatusText = document.getElementById('bottomStatusText');
+const etaTimeEl = document.getElementById('etaTime');
+const etaUnitEl = document.getElementById('etaUnit');
+const etaSubEl = document.getElementById('etaSub');
+const etaBoxEl = document.getElementById('etaBox');
+const titleEl = document.querySelector('h1');
+const subEl = document.querySelector('.sub');
+
+let order = null;
+let orderId = 'demo';
+
+try {
+    const raw = localStorage.getItem('r11rpl_last_order');
+    if (raw) order = JSON.parse(raw);
+    if (order && order.orderId) orderId = order.orderId;
+} catch (e) {
+    order = null;
+}
+
+if (order) {
+    const idEl = document.getElementById('orderIdText');
+    if (idEl) idEl.textContent = 'Pesanan ' + order.orderId;
+}
+
+/* Waktu mulai proses disimpan per orderId supaya progres tetap
+   jalan sesuai waktu asli walaupun halaman di-refresh */
+const START_KEY = 'r11rpl_process_start_' + orderId;
+const DONE_KEY = 'r11rpl_process_done_' + orderId;
+
+let startTime = parseInt(localStorage.getItem(START_KEY), 10);
+if (!startTime) {
+    startTime = Date.now();
+    localStorage.setItem(START_KEY, String(startTime));
+}
+
+const alreadyNotifiedBefore = localStorage.getItem(DONE_KEY) === '1';
+let hasCompleted = false;
+let intervalId = null;
+
+function setStepState(index, state) {
+    // state: '' (belum), 'current', 'completed'
+    const el = stepEls[index];
+    if (!el) return;
+    el.classList.remove('current', 'completed');
+    const icon = el.querySelector('.step-icon');
+    if (state === 'completed') {
+        el.classList.add('completed');
+        if (icon) icon.textContent = '✓';
+    } else if (state === 'current') {
+        el.classList.add('current');
+        if (icon) icon.textContent = String(index + 1);
+    } else {
+        if (icon) icon.textContent = String(index + 1);
+    }
+}
+
+function stageIndexFromPercent(percent) {
+    if (percent >= STAGE_START.selesai) return 3;
+    if (percent >= STAGE_START.siap) return 2;
+    if (percent >= STAGE_START.dimasak) return 1;
+    return 0;
+}
+
+function formatMMSS(ms) {
+    const totalSec = Math.max(0, Math.floor(ms / 1000));
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return m + ':' + String(s).padStart(2, '0');
+}
+
+function updateProgress() {
+    const elapsed = Date.now() - startTime;
+    const percent = Math.min(100, (elapsed / TOTAL_DURATION_MS) * 100);
+
+    progressBar.style.width = percent.toFixed(1) + '%';
+
+    const stageIdx = stageIndexFromPercent(percent);
+    for (let i = 0; i < 4; i++) {
+        if (percent >= 100) {
+            setStepState(i, 'completed');
+        } else if (i < stageIdx) {
+            setStepState(i, 'completed');
+        } else if (i === stageIdx) {
+            setStepState(i, 'current');
+        } else {
+            setStepState(i, '');
+        }
+    }
+
+    if (percent < 100) {
+        processingText.textContent = 'Sedang diproses... (' + Math.floor(percent) + '%)';
+
+        const remainingMs = TOTAL_DURATION_MS - elapsed;
+        etaTimeEl.textContent = formatMMSS(remainingMs);
+        etaUnitEl.textContent = 'tersisa';
+
+        if (stageIdx === 0) {
+            orderStatusEl.textContent = '📝 Pesanan diterima restoran';
+        } else if (stageIdx === 1) {
+            orderStatusEl.textContent = '👨‍🍳 Pesanan sedang dimasak';
+        } else if (stageIdx === 2) {
+            orderStatusEl.textContent = '🔥 Hampir selesai dimasak';
+        }
+    } else if (!hasCompleted) {
+        markOrderComplete();
+    }
+}
+
+function markOrderComplete() {
+    hasCompleted = true;
+
+    progressBar.classList.add('done');
+    progressBar.style.width = '100%';
+
+    processingText.textContent = 'Selesai ✅';
+    orderStatusEl.textContent = '✅ Pesanan selesai — siap diambil!';
+    bottomStatusText.textContent = 'Pesananmu sudah siap 🎉';
+
+    if (titleEl) titleEl.textContent = 'Pesananmu sudah siap! 🎉';
+    if (subEl) subEl.textContent = 'Silakan ambil pesananmu di kasir';
+
+    etaTimeEl.textContent = '✓';
+    etaUnitEl.textContent = 'Selesai';
+    if (etaSubEl) { etaSubEl.textContent = 'Pesanan siap!'; etaSubEl.classList.add('done'); }
+    if (etaBoxEl) etaBoxEl.classList.add('done');
+
+    if (orderInfoEl && order) {
+        const jumlahItem = (order.items || []).reduce((s, it) => s + it.qty, 0);
+        orderInfoEl.textContent =
+            'Pesanan meja ' + order.meja + ' (' + jumlahItem + ' item) sudah selesai dimasak dan siap diambil. Terima kasih sudah menunggu!';
+    }
+
+    if (intervalId) clearInterval(intervalId);
+
+    if (!alreadyNotifiedBefore) {
+        showToast();
+        playDoneSound();
+        if (navigator.vibrate) navigator.vibrate([150, 80, 150]);
+        localStorage.setItem(DONE_KEY, '1');
+    }
+
+    document.title = '✅ Pesanan Selesai - Restoran 11 RPL';
+}
+
+function showToast() {
+    const toast = document.getElementById('doneToast');
+    if (!toast) return;
+    if (order) {
+        const desc = document.getElementById('toastDesc');
+        if (desc) desc.textContent = 'Pesanan meja ' + order.meja + ' sudah siap, silakan ambil di kasir ya.';
+    }
+    toast.classList.add('show');
+    setTimeout(hideToast, 8000);
+}
+
+function hideToast() {
+    const toast = document.getElementById('doneToast');
+    if (toast) toast.classList.remove('show');
+}
+
+function playDoneSound() {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const notes = [880, 1174.66];
+        notes.forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.0001, ctx.currentTime + i * 0.18);
+            gain.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime + i * 0.18 + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + i * 0.18 + 0.28);
+            osc.connect(gain).connect(ctx.destination);
+            osc.start(ctx.currentTime + i * 0.18);
+            osc.stop(ctx.currentTime + i * 0.18 + 0.3);
+        });
+    } catch (e) {
+        // browser tidak mendukung Web Audio API, abaikan saja
+    }
+}
+
+window.addEventListener('load', function () {
+    updateProgress();
+    intervalId = setInterval(updateProgress, 1000);
+});
+
+function searchContent(){
+
+    alert(
+        "Fitur pencarian akan segera tersedia."
+    );
+
+}
+
+
+function showHelp(){
+
+    alert(
+        "Pesananmu masih dalam proses memasak. " +
+        "Silakan tunggu beberapa menit lagi."
+    );
+
+}
+
+</script>
+
+</body>
+</html>
