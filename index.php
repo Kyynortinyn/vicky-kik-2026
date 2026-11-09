@@ -1,20 +1,36 @@
 <?php
+// 1. Load Autoload Composer (Untuk Blade)
 require 'vendor/autoload.php';
 
-use Jenssegers\Blade\Blade;
+// 2. Load File di folder Config
+require 'config/database.php'; // Menyediakan variabel $pdo
+require 'config/globals.php';  // Menyediakan konstanta & $GLOBALS
+require 'config/helpers.php';  // Menyediakan fungsi dd() dan sanitize()
 
-// Tentukan path folder views dan folder cache
+// 3. Load File Model
+require 'models/UserModel.php';
+
+use eftec\bladeone\BladeOne;
+
+// 4. Inisialisasi Model & Ambil Data
+$userModel = new UserModel($pdo);
+$daftarUser = $userModel->getAllUsers(); // Mengambil data dari database
+
+// Contoh penggunaan helper global dd() untuk debug (opsional, hapus jika tidak dipakai)
+// dd($daftarUser); 
+
+// 5. Inisialisasi Blade Engine
 $views = __DIR__ . '/views';
 $cache = __DIR__ . '/cache';
+// Di BladeOne, kita bisa mengatur mode error (MODE_DEBUG sangat cocok untuk development)
+$blade = new BladeOne($views, $cache, BladeOne::MODE_DEBUG);
 
-$blade = new Blade($views, $cache);
-
-// Data yang ingin dikirim ke view
+// 6. Siapkan data untuk View
 $data = [
-    'title' => 'Halaman Utama PHP Native + Blade',
-    'user' => 'John Doe',
-    'items' => ['Belajar PHP', 'Belajar Blade', 'Bikin Project']
+    'title' => APP_NAME, // Menggunakan konstanta global
+    'users' => $daftarUser
 ];
 
-// Render file 'home.blade.php' yang ada di folder views
-echo $blade->render('home', $data);
+// 7. Render View
+// Cara manggilnya sama persis memakai method run() atau render()
+echo $blade->run('home', $data);

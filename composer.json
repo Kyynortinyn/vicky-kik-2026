@@ -1,5 +1,8 @@
 {
+    "scripts": {
+        "serve": "php server.php"
+    },
     "require": {
-        "jenssegers/blade": "^2.0"
+        "eftec/bladeone": "^5.0"
     }
 }
